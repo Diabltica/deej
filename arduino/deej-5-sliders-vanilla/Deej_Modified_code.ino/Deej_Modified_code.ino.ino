@@ -12,6 +12,8 @@ const int NUM_LED = 6; // Number of Led
 int analogSliderValues[NUM_SLIDERS];
 bool IsMute [NUM_MUTE_BUTTONS];
 
+int Memory[6]={0,0,0,0,0,0};
+
 CRGB leds[NUM_LED];
 
 
@@ -50,16 +52,17 @@ void updateSliderValues() {
 
 void sendSliderValues() {
   String builtString = String("");
-
-  for (int i = 0; i < NUM_SLIDERS; i++) {
-    builtString += String((int)analogSliderValues[i]);
-
-    if (i < NUM_SLIDERS - 1) {
-      builtString += String("|");
-    }
-  }
+  if(TrackChanges() == 0){
+    for (int i = 0; i < NUM_SLIDERS; i++) {
+      builtString += String((int)analogSliderValues[i]);
   
-  Serial.println(builtString);
+      if (i < NUM_SLIDERS - 1) {
+        builtString += String("|");
+      }
+    }
+    
+    Serial.println(builtString);
+  }
 }
 
 void printSliderValues() {
@@ -91,5 +94,16 @@ void ControlLed(int NLed, int C){
   switch(C){
     case 1:leds[NLed] = CRGB::Red; FastLED.show(); delay(30);
     case 2:leds[NLed] = CRGB::Green; FastLED.show(); delay(30);
-    }
   }
+}
+
+int TrackChanges(){
+  for(int i = 0; i<NUM_SLIDERS; i++){
+    if(analogSliderValues[i] == Memory[i]){
+      return 0;
+    }else if(analogSliderValues[i] != Memory[i]){
+     Memory[i] = analogSliderValues[i]; 
+     }
+  }
+  return 1;
+}
