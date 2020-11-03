@@ -92,9 +92,11 @@ void ControlLed(int NLed, int C){
   //1 for Red
   //2 for Green
   switch(C){
-    case 1:leds[NLed] = CRGB::Red; FastLED.show(); delay(30);
-    case 2:leds[NLed] = CRGB::Green; FastLED.show(); delay(30);
+    case 1:leds[NLed] = CRGB::Red;
+    case 2:leds[NLed] = CRGB::Green;
   }
+  FastLED.show(); 
+  delay(30);
 }
 
 int TrackChanges(){
